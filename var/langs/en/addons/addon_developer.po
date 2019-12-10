@@ -1,0 +1,13 @@
+msgid ""
+msgstr "Project-Id-Version: tygh"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language-Team: English\n"
+"Language: en_US"
+
+msgctxt "Addons::name::addon_developer"
+msgid "Developer mode"
+msgstr "Developer mode"
+
+msgctxt "Addons::description::addon_developer"
+msgid "This is a developer mode"
+msgstr "This is a developer mode"
