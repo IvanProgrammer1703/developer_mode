@@ -8,49 +8,42 @@ if (empty($argv[1])) {
     exit(127);
 }
 
-$addon_name = 'addon_developer';
-
 $paths = array(
-    '/app/addons/' . $addon_name => '/app/addons/' . $addon_name,
-    '/design/backend/media/images/addons/' . $addon_name => '/design/backend/media/images/addons/' . $addon_name,
-    '/design/backend/templates/addons/' . $addon_name => '/design/backend/templates/addons/' . $addon_name,
-    '/design/backend/css/addons/' . $addon_name => '/design/backend/css/addons/' . $addon_name,
-    '/js/addons/'. $addon_name => '/js/addons/'. $addon_name,
-    '/design/themes/responsive/css/addons/' . $addon_name => '/var/themes_repository/responsive/css/addons/' . $addon_name,
-    '/design/themes/responsive/templates/addons/' . $addon_name => '/var/themes_repository/responsive/templates/addons/' . $addon_name,
-    '/var/langs/en/addons/' . $addon_name . '.po' => '/var/langs/en/addons/' . $addon_name . '.po',
-    '/var/langs/ru/addons/' . $addon_name . '.po' => '/var/langs/ru/addons/' . $addon_name . '.po',
+    '/design/backend/css/addons/addon_developer' => '/design/backend/css/addons/addon_developer',
+    '/app/addons/addon_developer' => '/app/addons/addon_developer',
+    '/design/backend/templates/addons/addon_developer' => '/design/backend/templates/addons/addon_developer',
+    '/design/backend/media/images/addons/addon_developer' => '/design/backend/media/images/addons/addon_developer',
+    '/design/backend/mail/templates/addons/addon_developer' => '/design/backend/mail/templates/addons/addon_developer',
+    '/var/langs/en/addons/addon_developer.po' => '/var/langs/en/addons/addon_developer.po',
+    '/var/langs/ru/addons/addon_developer.po' => '/var/langs/ru/addons/addon_developer.po',
+    '/js/addons/addon_developer' => '/js/addons/addon_developer',
+    '/design/themes/responsive/templates/addons/addon_developer' => '/var/themes_repository/responsive/templates/addons/addon_developer',
+    '/design/themes/responsive/mail/templates/addons/addon_developer' => '/var/themes_repository/responsive/mail/templates/addons/addon_developer',
+    '/design/themes/responsive/css/addons/addon_developer' => '/var/themes_repository/responsive/css/addons/addon_developer',
 );
 
+$source_dir = realpath(dirname(__FILE__) . '/../');
 
-$dir_target = realpath($argv[1]);
-
-$dir = realpath(dirname(__FILE__) . '/../');
+$target_dir = realpath($argv[1]);
 
 foreach ($paths as $target => $source) {
 
-    if (file_exists($dir_target . $target)) {
-        unlink($dir_target . $target);
+    $target = fn_fix_path($target);
+    $source = fn_fix_path($source);
+
+    if (file_exists($target_dir . $target)) {
+        unlink($target_dir . $target);
+    }
+    if (!isset($argv[2]) || $argv[2] != 'delete') {
+
+        $command = fn_fix_path("ln -s {$source_dir}{$source} {$target_dir}{$target}");
+
+        system($command);
     }
 
-    if (!isset($argv[2]) || $argv[2] != 'delete') {
-          // WIN
-        if (DIRECTORY_SEPARATOR == '\\') {
-            $dirSrc = $dir . str_replace('/', '\\', $source);
-            $dirDest = $dir_target . str_replace('/', '\\', $target);
-            if (file_exists($dirSrc)) {
-                exec('mklink /D ' . '"' . $dirDest . '"' . ' ' . '"' .  $dirSrc . '"' . ' ');
-            } else {
-                echo ('directory \'' . str_replace('/', '\\', $target) . "' not found. Skip. \r\n");
-            }
-        }
-        // NIX
-        else {
-            if (file_exists($dir . $source)) {
-                system("ln -s {$dir}{$source} {$dir_target}{$target}");
-            } else {
-                echo ('directory \'' . substr($source, 1) . "' not found. Skip. \r\n");
-            }
-        }
-    }
+}
+
+function fn_fix_path($path)
+{
+    return str_replace('/', DIRECTORY_SEPARATOR, $path);
 }
