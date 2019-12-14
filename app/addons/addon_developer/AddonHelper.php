@@ -29,13 +29,16 @@ class AddonHelper
 
     public static function getAddonList($params = [])
     {
-        $addons = Tygh::$app['db']->getArray('SELECT * FROM ?:addons WHERE addon IN (?a) LIMIT 0, ?i', static::$favoriteAddons, $params['count'] ?? 5);
+        list($addons, $params, $addon_counter) = fn_get_addons($params);
         $current_url = urlencode(Registry::get('config.current_url'));
-        foreach ($addons as &$addon) {
-            $name = $addon['addon'];
-            $addon['refresh_url'] = fn_url("addons.refresh?addon={$name}&return_url=" . $current_url);
-            $addon['reinstall_url'] = fn_url("addons.reinstall?addon={$name}&return_url=" . $current_url);
-            $addon['update_url'] = fn_url("addons.update?addon={$name}&return_url=" . $current_url);
+
+        foreach ($addons as $addon_key => &$addon) {
+            if ($addon['status'] == 'N') {
+                $addon['install_url'] = fn_url('addons.install?addon=' . $addon_key . '&return_url=' . $current_url);
+            }
+            else {
+                $addon['reinstall_url'] = fn_url('addons.reinstall?addon=' . $addon_key . '&return_url=' . $current_url);
+            }
         }
 
         return $addons;

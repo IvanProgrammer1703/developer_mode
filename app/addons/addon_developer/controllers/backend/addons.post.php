@@ -21,7 +21,7 @@ defined('BOOTSTRAP') or die('Access denied');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    if ($mode == 'reinstall_addon') {
+    if ($mode == 'reinstall') {
         if (!empty($_REQUEST['addon'])) {
             if (AddonHelper::reinstallAddon($_REQUEST['addon'])) {
                 return [CONTROLLER_STATUS_OK];
