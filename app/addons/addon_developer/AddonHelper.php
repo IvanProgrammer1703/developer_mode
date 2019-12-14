@@ -34,10 +34,10 @@ class AddonHelper
 
         foreach ($addons as $addon_key => &$addon) {
             if ($addon['status'] == 'N') {
-                $addon['install_url'] = fn_url('addons.install?addon=' . $addon_key . '&return_url=' . $current_url);
+                $addon['install_url'] = fn_url("addons.install?addon={$addon_key}&return_url={$current_url}");
             }
             else {
-                $addon['reinstall_url'] = fn_url('addons.reinstall?addon=' . $addon_key . '&return_url=' . $current_url);
+                $addon['reinstall_url'] = fn_url("addons.reinstall?addon={$addon_key}&return_url={$current_url}");
             }
         }
 
