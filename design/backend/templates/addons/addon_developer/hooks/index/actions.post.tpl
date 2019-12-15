@@ -23,37 +23,31 @@
             { /if }>
         </select>
     </div>
-
+    <ul class="addon-list-favorites cm-favorite-addons">
     {foreach $favorite_addons as $addon}
-        <li style="padding: 2px 5px">
+        <li class="addon-list-favorites__item">
             {if ($addon.status == 'N')}
-                <span><a class="alert-success cm-post" href="{$addon.install_url}">
-                    {__("install")}
-                    {* <i class="cm-post icon-plus"></i> *}
+                <span><a class="alert-success cm-post icon-plus" href="{$addon.install_url}">
+
                 </a></span>
             {else}
                 {if ($addon.urls.uninstall)}
-                    <span><a class="alert-danger cm-post cm-confirm" href="{$addon.urls.uninstall}">
-                        {__("uninstall")}
-                        {* <i class="cm-post cm-confirm icon-trash"></i> *}
+                    <span><a class="alert-danger cm-post cm-confirm icon-trash" href="{$addon.urls.uninstall}">
                     </a></span>
                 {/if}
                 {if ($addon.urls.reinstall)}
-                    <span><a class="alert-info cm-post cm-confirm" href="{$addon.urls.reinstall}">
-                        {__("addon_developer.reinstall")}
-                        {* <i class="cm-post cm-confirm icon-trash"></i> *}
+                    <span><a class="alert-info cm-post cm-confirm icon-trash" href="{$addon.urls.reinstall}">
                     </a></span>
                 {/if}
                 {if ($addon.urls.refresh)}
-                    <span><a class="cm-post" href="{$addon.urls.refresh}">
-                        {__("refresh")}
-                        {* <i class="cm-post icon-refresh"></i> *}
+                    <span><a class="cm-pos icon-refresh" href="{$addon.urls.refresh}">
                     </a></span>
                 {/if}
             {/if}
             {$addon.name}
         </li>
     {/foreach}
+    </ul>
     {if !$favorite_addons}
         <div class="no-items">{__("no_items")}</div>
     {/if}
