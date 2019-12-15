@@ -12,19 +12,21 @@
 * "copyright.txt" FILE PROVIDED WITH THIS DISTRIBUTION PACKAGE.            *
 ****************************************************************************/
 
-use Tygh\Registry;
 use AddonDeveloper\AddonHelper;
-
-require_once(dirname(__DIR__, 2) . '/AddonHelper.php');
 
 defined('BOOTSTRAP') or die('Access denied');
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // return [CONTROLLER_STATUS_OK];
+if (!defined('AJAX_REQUEST')) {
+    require_once(dirname(__DIR__, 2) . '/AddonHelper.php');
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        return [CONTROLLER_STATUS_OK];
+    }
+
+    $addons = AddonHelper::getAddonList([], true);
+    $favorite_addons = AddonHelper::getFavoriteAddonList();
+
+    Tygh::$app['view']->assign([
+        'addon_list' => $addons,
+        'favorite_addons' => $favorite_addons,
+    ]);
 }
-
-$addons = AddonHelper::getAddonList();
-
-Tygh::$app['view']->assign([
-    'addon_list' => $addons,
-]);

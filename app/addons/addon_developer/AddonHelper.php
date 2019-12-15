@@ -14,31 +14,18 @@
 
 namespace AddonDeveloper;
 
-use Tygh\Tygh;
 use Tygh\Registry;
 
 class AddonHelper
 {
     //TODO: Get addons from settings or last edited addons
-    public static $favoriteAddons =
-    [
-        'addon_developer',
-        'banners',
-        'seo'
-    ];
+    // public static $favoriteAddons;
 
-    public static function getAddonList($params = [])
+    public static function getAddonList($params = [], $generate_urls = false)
     {
-        list($addons, $params, $addon_counter) = fn_get_addons($params);
-        $current_url = urlencode(Registry::get('config.current_url'));
-
-        foreach ($addons as $addon_key => &$addon) {
-            if ($addon['status'] == 'N') {
-                $addon['install_url'] = fn_url("addons.install?addon={$addon_key}&return_url={$current_url}");
-            }
-            else {
-                $addon['reinstall_url'] = fn_url("addons.reinstall?addon={$addon_key}&return_url={$current_url}");
-            }
+        list($addons) = fn_get_addons($params);
+        if ($generate_urls) {
+            $addons = static::generateAddonsUrls($addons);
         }
 
         return $addons;
@@ -48,5 +35,48 @@ class AddonHelper
     {
         return fn_uninstall_addon($addon_name)
         && fn_install_addon($addon_name);
+    }
+
+    public static function getFavoriteAddonList()
+    {
+        $setting = 'addons.addon_developer.favorite_addons';
+        $favorite_addons = Registry::get($setting);
+        $addons = [];
+        if (!empty($favorite_addons)) {
+            $addons = static::getAddonList();
+        }
+        $addons = array_intersect_key($addons, $favorite_addons);
+        $addons = static::generateAddonsUrls($addons);
+
+        return $addons;
+    }
+
+    public static function getSettingsAddonList()
+    {
+        $addons = static::getAddonList();
+        $addons = array_map(function($addon) {return $addon['name'];}, $addons);
+
+        return $addons;
+    }
+
+    public static function generateAddonsUrls($addons)
+    {
+        $current_url = Registry::get('config.current_url');
+
+        $actions = [
+            'refresh',
+            'reinstall',
+            'update',
+            'install',
+            'uninstall',
+        ];
+        foreach ($addons as $addon_key => &$addon) {
+            foreach ($actions as $action) {
+                $return_url = urlencode($current_url);
+                $addon[$action . '_url'] = fn_url("addons.{$action}&addon={$addon_key}") . "&return_url={$return_url}";
+            }
+        }
+
+        return $addons;
     }
 }
