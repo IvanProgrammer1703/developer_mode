@@ -1,9 +1,9 @@
 <div>
 
 {capture "addon_list"}
-<div style="background: white; position: fixed;">
+{* <div style="background: white; position: fixed;"> *}
 {* <div style="overflow-y: scroll; height: 200px;"> *}
-    <div class="form-inline object-selector object-addon-add cm-object-addon-add-container">
+    <div style="padding: 2px 5px" class="form-inline object-selector object-addon-add cm-object-addon-add-container">
         <select id="addon_select"
             class="cm-object-selector cm-object-addon"
             name="addon_list"
@@ -32,20 +32,20 @@
                     {* <i class="cm-post icon-plus"></i> *}
                 </a></span>
             {else}
-                {if ($addon.uninstall_url)}
-                    <span><a class="alert-danger cm-post cm-confirm" href="{$addon.delete_url}">
+                {if ($addon.urls.uninstall)}
+                    <span><a class="alert-danger cm-post cm-confirm" href="{$addon.urls.uninstall}">
                         {__("uninstall")}
                         {* <i class="cm-post cm-confirm icon-trash"></i> *}
                     </a></span>
                 {/if}
-                {if ($addon.reinstall_url)}
-                    <span><a class="alert-info cm-post cm-confirm" href="{$addon.reinstall_url}">
+                {if ($addon.urls.reinstall)}
+                    <span><a class="alert-info cm-post cm-confirm" href="{$addon.urls.reinstall}">
                         {__("addon_developer.reinstall")}
                         {* <i class="cm-post cm-confirm icon-trash"></i> *}
                     </a></span>
                 {/if}
-                {if ($addon.refresh_url)}
-                    <span><a class="cm-post" href="{$addon.refresh_url}">
+                {if ($addon.urls.refresh)}
+                    <span><a class="cm-post" href="{$addon.urls.refresh}">
                         {__("refresh")}
                         {* <i class="cm-post icon-refresh"></i> *}
                     </a></span>
@@ -59,7 +59,7 @@
     {/if}
 
 {* </div> *}
-</div>
+{* </div> *}
 {/capture}
 
 {dropdown

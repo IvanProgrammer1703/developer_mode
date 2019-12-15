@@ -21,13 +21,9 @@ class AddonHelper
     //TODO: Get addons from settings or last edited addons
     // public static $favoriteAddons;
 
-    public static function getAddonList($params = [], $generate_urls = false)
+    public static function getAddonList($params = [])
     {
         list($addons) = fn_get_addons($params);
-        if ($generate_urls) {
-            $addons = static::generateAddonsUrls($addons);
-        }
-
         return $addons;
     }
 
@@ -46,7 +42,9 @@ class AddonHelper
             $addons = static::getAddonList();
         }
         $addons = array_intersect_key($addons, $favorite_addons);
-        $addons = static::generateAddonsUrls($addons);
+        foreach ($addons as $addon_key => &$addon) {
+            $addon['urls'] = static::generateAddonUrls($addon_key);
+        }
 
         return $addons;
     }
@@ -59,10 +57,11 @@ class AddonHelper
         return $addons;
     }
 
-    public static function generateAddonsUrls($addons)
+    public static function generateAddonUrls($addon_key,$current_url = '')
     {
-        $current_url = Registry::get('config.current_url');
-
+        if (!$current_url) {
+            $current_url = Registry::get('config.current_url');
+        }
         $actions = [
             'refresh',
             'reinstall',
@@ -70,13 +69,12 @@ class AddonHelper
             'install',
             'uninstall',
         ];
-        foreach ($addons as $addon_key => &$addon) {
-            foreach ($actions as $action) {
-                $return_url = urlencode($current_url);
-                $addon[$action . '_url'] = fn_url("addons.{$action}&addon={$addon_key}") . "&return_url={$return_url}";
-            }
+        $urls = [];
+        foreach ($actions as $action) {
+            $return_url = urlencode($current_url);
+            $urls[$action] = fn_url("addons.{$action}&addon={$addon_key}") . "&return_url={$return_url}";
         }
 
-        return $addons;
+        return $urls;
     }
 }
