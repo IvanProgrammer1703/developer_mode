@@ -27,7 +27,7 @@
     {foreach $favorite_addons as $addon}
         <li class="addon-list-favorites__item">
             {if ($addon.status == 'N')}
-                <span><a class="alert-success cm-post icon-plus" href="{$addon.install_url}">
+                <span><a class="alert-success cm-post icon-plus" href="{$addon.urls.install}">
 
                 </a></span>
             {else}
@@ -40,7 +40,7 @@
                     </a></span>
                 {/if}
                 {if ($addon.urls.refresh)}
-                    <span><a class="cm-pos icon-refresh" href="{$addon.urls.refresh}">
+                    <span><a class="cm-post icon-refresh" href="{$addon.urls.refresh}">
                     </a></span>
                 {/if}
             {/if}
