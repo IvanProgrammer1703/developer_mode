@@ -16,17 +16,19 @@ use AddonDeveloper\AddonHelper;
 
 defined('BOOTSTRAP') or die('Access denied');
 
-if (!defined('AJAX_REQUEST')) {
-    require_once(dirname(__DIR__, 2) . '/AddonHelper.php');
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        return [CONTROLLER_STATUS_OK];
-    }
-
-    $addons = AddonHelper::getAddonList([], true);
-    $favorite_addons = AddonHelper::getFavoriteAddonList();
-
-    Tygh::$app['view']->assign([
-        'addon_list' => $addons,
-        'favorite_addons' => $favorite_addons,
-    ]);
+if ($_SERVER['REQUEST_METHOD'] == 'POST'
+    || $controller == 'addons'
+    || $controller == 'notifications_center'
+    || defined('AJAX_REQUEST') && $controller != 'index'
+) {
+    return [CONTROLLER_STATUS_OK];
 }
+
+$addons = AddonHelper::getAddonList([], true);
+$favorite_addons = AddonHelper::getFavoriteAddonList();
+
+Tygh::$app['view']->assign([
+    'addon_list' => $addons,
+    'favorite_addons' => $favorite_addons,
+    'show_addon_developer_menu' => true
+]);
