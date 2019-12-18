@@ -19,3 +19,7 @@ msgstr "Addon developer"
 msgctxt "Languages::addon_developer.reinstall"
 msgid "Reinstall"
 msgstr "Reinstall"
+
+msgctxt "Languages::addon_developer.disabled_on_addons_page"
+msgid "Disabled on addons page"
+msgstr "Disabled on addons page"

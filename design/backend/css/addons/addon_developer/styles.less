@@ -10,10 +10,49 @@ body {
   background-color:#8C8C8C;
 }
 
+.addon-developer-dropdown {
+  padding: 5px 0px 0px 0px;
+  &__form {
+    margin-bottom: 0px;
+  }
+  &__settings-button {
+    margin: 10px;
+    max-width: 10%;
+  }
+  &__search {
+    max-width: 90%;
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+}
+
 .addon-list-favorites {
   list-style: none;
   margin: 0;
   &__item {
     padding: 2px 5px;
+  }
+}
+
+@media (max-width: @TabletBreakpoint) {
+  .addon-developer-dropdown {
+    margin: 0;
+    padding: 7px 6px 6px 6px;
+    background: #fff;
+    text-align: left;
+    position: absolute;
+    top: 100%;
+    left: 10px;
+    z-index: 10;
+    .btn {
+      line-height: 22px;
+      padding: 4px 12px 0px 12px;
+    }
+    &__icon {
+      margin: 1px 0px 0px 0px;
+    }
+    .dropdown-toggle {
+      font-size: 0!important;
+    }
   }
 }

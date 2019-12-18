@@ -1,9 +1,14 @@
-<div>
 
 {capture "addon_list"}
-{* <div style="background: white; position: fixed;"> *}
-{* <div style="overflow-y: scroll; height: 200px;"> *}
-    <div style="padding: 2px 5px" class="form-inline object-selector object-addon-add cm-object-addon-add-container">
+
+{if $show_addon_developer_menu}
+
+{$drowpdown_icon = "addon-developer-dropdown__icon icon-puzzle-piece icon-blue"}
+
+<form class="cm-ajax addon-developer-dropdown__form">
+    <a href="{fn_url("addons.update&addon=addon_developer")}" class="addon-developer-dropdown__settings-button icon-cog"></a>
+    <input type="hidden" name="result_ids" value="addon_name"/>
+    <div class="addon-developer-dropdown__search form-inline object-selector object-addon-add cm-object-addon-add-container">
         <select id="addon_select"
             class="cm-object-selector cm-object-addon"
             name="addon_list"
@@ -20,7 +25,8 @@
                 { data-ca-autofocus="false" }
             { else }
                 { data-ca-autofocus="true" }
-            { /if }>
+            { /if }
+        >
         </select>
     </div>
     <ul class="addon-list-favorites cm-favorite-addons">
@@ -49,17 +55,21 @@
     {/foreach}
     </ul>
     {if !$favorite_addons}
-        <div class="no-items">{__("no_items")}</div>
+        {__("no_items")}
     {/if}
+</form>
 
-{* </div> *}
-{* </div> *}
+{else}
+    {$drowpdown_icon = "icon-remove"}
+    <a class="addon-developer-dropdown__settings-button icon-cog" href="{fn_url("addons.update&addon=addon_developer")}"></a>{__("addon_developer.disabled_on_addons_page")}
+{/if}
+
 {/capture}
 
 {dropdown
     content=$smarty.capture.addon_list
-    class=""
-    icon="icon-puzzle-piece icon-blue"
+    class="addon-developer-dropdown"
+    icon=$drowpdown_icon
     no_caret=true
     text={__("addon_developer")}
 }
