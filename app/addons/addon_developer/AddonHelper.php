@@ -43,7 +43,7 @@ class AddonHelper
         }
         $addons = array_intersect_key($addons, $favorite_addons);
         foreach ($addons as $addon_key => &$addon) {
-            $addon['urls'] = static::generateAddonUrls($addon_key);
+            $addon['urls'] = static::generateAddonUrls($addon_key, $addon['status']);
         }
 
         return $addons;
@@ -57,22 +57,36 @@ class AddonHelper
         return $addons;
     }
 
-    public static function generateAddonUrls($addon_key,$current_url = '')
+    public static function generateAddonUrls($addon_key, $status = '', $current_url = '')
     {
         if (!$current_url) {
             $current_url = Registry::get('config.current_url');
         }
-        $actions = [
-            'refresh',
-            'reinstall',
-            'update',
-            'install',
-            'uninstall',
-        ];
+        $return_url = urlencode($current_url);
+
+        if ($status == 'N') {
+            $actions = [
+                'install' => 'install'
+            ];
+        }
+        else {
+            $actions = [
+                'refresh' => 'refresh',
+                'reinstall' => 'reinstall',
+                'update' => 'update',
+                'uninstall' => 'uninstall'
+            ];
+        }
+
         $urls = [];
-        foreach ($actions as $action) {
-            $return_url = urlencode($current_url);
-            $urls[$action] = fn_url("addons.{$action}&addon={$addon_key}") . "&return_url={$return_url}";
+        foreach ($actions as $action_key => $action) {
+            $urls[$action_key] = fn_url("addons.{$action}&addon={$addon_key}") . "&return_url={$return_url}";
+        }
+
+        if ($status == 'A') {
+            $urls['disable'] = fn_url("addons.update_status&status=D&id={$addon_key}") . "&redirect_url={$return_url}";
+        } elseif ($status == 'D') {
+            $urls['enable'] = fn_url("addons.update_status&status=A&id={$addon_key}") . "&redirect_url={$return_url}";
         }
 
         return $urls;

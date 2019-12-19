@@ -16,6 +16,8 @@ use Tygh\Settings;
 use Tygh\Enum\YesNo;
 use AddonDeveloper\AddonHelper;
 
+if (!file_exists(dirname(__DIR__, 2) . '/AddonHelper.php')) return;
+
 require_once(dirname(__DIR__, 2) . '/AddonHelper.php');
 
 defined('BOOTSTRAP') or die('Access denied');
@@ -29,29 +31,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
     }
+
     if ($mode == 'add_to_fav') {
         $params = $_REQUEST;
-        $addon_name = $params['addon_name'] ?? null;
+        $addon_code = $params['addon_code'] ?? null;
         $result = [];
-        if ($addon_name) {
+        if ($addon_code) {
             $setting = 'addons.addon_developer.favorite_addons';
             $favorite_addons = Settings::instance()->getValue('favorite_addons', 'addon_developer');
-            if (!in_array($addon_name, $favorite_addons)) {
-                $favorite_addons[$addon_name] = YesNo::YES;
-                Settings::instance()->updateValue('favorite_addons', array_keys($favorite_addons), 'addon_developer');
-                $favorite_addons = Settings::instance()->getValue('favorite_addons', 'addon_developer');
-                $addon = [
-                    'addon_name' => $addon_name,
-                    'urls' => AddonHelper::generateAddonUrls($addon_name)
-                ];
-                $result = ['addon' => $addon];
-            }
 
+            if (!in_array($addon_code, $favorite_addons)) {
+                $favorite_addons[$addon_code] = YesNo::YES;
+                Settings::instance()->updateValue('favorite_addons', array_keys($favorite_addons), 'addon_developer');
+                $addon_info = AddonHelper::getAddonList()[$addon_code];
+                $addon = [
+                    'name' => $addon_info['name'],
+                    'status' => $addon_info['status'],
+                    'urls' => AddonHelper::generateAddonUrls($addon_code, $addon_info['status']),
+                ];
+            }
         }
-        return json_encode($result);
+
+        Tygh::$app['view']->assign('addon', $addon);
+        Tygh::$app['ajax']->assign('response', Tygh::$app['view']->fetch('addons/addon_developer/views/addon_developer/components/favorite_addon.tpl'));
     }
 
-    // return [CONTROLLER_STATUS_NO_PAGE];
+    return [CONTROLLER_STATUS_OK];
 }
 
 if ($mode == 'get_addon_list') {
@@ -70,7 +75,7 @@ if ($mode == 'get_addon_list') {
     $params = array_merge($default_params, $params);
     $addon_list = AddonHelper::getAddonList($params);
     foreach ($addon_list as $addon_key => &$addon) {
-        $addon['urls'] = AddonHelper::generateAddonUrls($addon_key);
+        $addon['urls'] = AddonHelper::generateAddonUrls($addon_key, $addon['status']);
     }
     $objects = [];
     if ($addon_list) {
