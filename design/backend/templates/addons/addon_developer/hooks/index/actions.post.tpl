@@ -73,5 +73,3 @@
     no_caret=true
     text={__("addon_developer")}
 }
-
-</div>

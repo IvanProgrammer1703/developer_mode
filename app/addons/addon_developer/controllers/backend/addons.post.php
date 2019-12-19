@@ -78,7 +78,7 @@ if ($mode == 'get_addon_list') {
             // TODO: watch next todo
             // Tygh::$app['view']->assign('addon', $addon_list);
             return [
-                'id' => $addon_list['addon'],
+                'id' => $addon_list_keys,
                 'text' => $addon_list['name'],
                 // TODO: Is it possible to add buttons to select2 list?
                 // 'data' => [
