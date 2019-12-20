@@ -12,20 +12,23 @@
 * "copyright.txt" FILE PROVIDED WITH THIS DISTRIBUTION PACKAGE.            *
 ****************************************************************************/
 
-use AddonDeveloper\AddonHelper;
+use AddonDeveloper\AddonDev;
 
 defined('BOOTSTRAP') or die('Access denied');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST'
-    || $controller == 'addons'
-    || $controller == 'notifications_center'
+    || in_array($controller, [
+            'addons',
+            'addon_dev',
+            'notifications_center',
+        ])
     || defined('AJAX_REQUEST') && $controller != 'index'
 ) {
     return [CONTROLLER_STATUS_OK];
 }
 
-$addons = AddonHelper::getAddonList([], true);
-$favorite_addons = AddonHelper::getFavoriteAddonList();
+$addons = AddonDev::getAddonList([], true);
+$favorite_addons = AddonDev::getFavoriteAddonList();
 
 Tygh::$app['view']->assign([
     'addon_list' => $addons,

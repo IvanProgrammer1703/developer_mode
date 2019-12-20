@@ -14,48 +14,71 @@
 
 use Tygh\Settings;
 use Tygh\Enum\YesNo;
-use AddonDeveloper\AddonHelper;
-
-if (!file_exists(dirname(__DIR__, 2) . '/AddonHelper.php')) return;
-
-require_once(dirname(__DIR__, 2) . '/AddonHelper.php');
+use AddonDeveloper\AddonDev;
+use Tygh\Registry;
 
 defined('BOOTSTRAP') or die('Access denied');
 
+if (!file_exists(dirname(__DIR__, 2) . '/AddonDev.php')) return;
+require_once(dirname(__DIR__, 2) . '/AddonDev.php');
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    if ($mode == 'reinstall') {
-        if (!empty($_REQUEST['addon'])) {
-            if (AddonHelper::reinstallAddon($_REQUEST['addon'])) {
+    $addon_id = $_REQUEST['addon'] ?? $_REQUEST['addon_id'] ?? null;
+    $return_url = $_REQUEST['return_url'] ?? 'addons.manage';
+
+    if (!empty($addon_id)) {
+
+        if ($mode == 'install') {
+            if (AddonDev::installAddon($addon_id)) {
+
+                return [CONTROLLER_STATUS_OK];
+            }
+        }
+
+        if ($mode == 'uninstall') {
+            if (AddonDev::uninstallAddon($addon_id)) {
+
+                return [CONTROLLER_STATUS_OK];
+            }
+        }
+
+        if ($mode == 'reinstall') {
+            if (AddonDev::reinstallAddon($addon_id)) {
+
+                return [CONTROLLER_STATUS_OK];
+            }
+        }
+
+        if ($mode == 'refresh') {
+            if (AddonDev::refreshAddon($addon_id)) {
+
+                return [CONTROLLER_STATUS_OK];
+            }
+        }
+
+        if ($mode == 'toggle') {
+            $state = $_REQUEST['state'] ?? false;
+            $state_changed = AddonDev::toggleAddon($addon_id, $state);
+            Tygh::$app['ajax']->assign('state_changed', $state_changed);
+
+            return [CONTROLLER_STATUS_OK];
+        }
+
+        if ($mode == 'add_to_fav') {
+            list($addon_id, $addon) = AddonDev::addToFavorites($addon_id);
+            fn_print_r(str_replace(DIR_ROOT,'',__FILE__).(empty($mode)?'':'  Mode='.$mode).(empty(__FUNCTION__)?' ':'  FN '.__FUNCTION__).': '.__LINE__.
+            "    \$addon",$addon);
+            if ($addon) {
+                Tygh::$app['view']->assign('addon_id', $addon_id);
+                Tygh::$app['view']->assign('addon_id', $addon_id);
+                Tygh::$app['ajax']->assign('response', Tygh::$app['view']->fetch('addons/addon_developer/views/addon_developer/components/favorite_addon.tpl'));
                 return [CONTROLLER_STATUS_OK];
             }
         }
     }
 
-    if ($mode == 'add_to_fav') {
-        $params = $_REQUEST;
-        $addon_id = $params['addon_id'] ?? null;
-        $result = [];
-        if ($addon_id) {
-            $setting = 'addons.addon_developer.favorite_addons';
-            $favorite_addons = Settings::instance()->getValue('favorite_addons', 'addon_developer');
-            if (!in_array($addon_id, array_keys($favorite_addons))) {
-                $favorite_addons[$addon_id] = YesNo::YES;
-                Settings::instance()->updateValue('favorite_addons', array_keys($favorite_addons), 'addon_developer');
-                $addon_info = AddonHelper::getAddonList()[$addon_id];
-                $addon = [
-                    'name' => $addon_info['name'],
-                    'status' => $addon_info['status'],
-                    'urls' => AddonHelper::generateAddonUrls($addon_id, $addon_info['status']),
-                ];
-
-                Tygh::$app['view']->assign('addon', $addon);
-                Tygh::$app['ajax']->assign('response', Tygh::$app['view']->fetch('addons/addon_developer/views/addon_developer/components/favorite_addon.tpl'));
-            }
-        }
-    }
-
-    return [CONTROLLER_STATUS_OK];
+    return [CONTROLLER_STATUS_DENIED];
 }
 
 if ($mode == 'get_addon_list') {
@@ -69,12 +92,13 @@ if ($mode == 'get_addon_list') {
     $default_params = [
         'type' => 'any',
         'source' => '',
-        'dispatch' => 'addons.get_addon_list'
+        'dispatch' => 'addon_dev.get_addon_list'
     ];
     $params = array_merge($default_params, $params);
-    $addon_list = AddonHelper::getAddonList($params, true);
+    $addon_list = AddonDev::getAddonList($params, true);
+
     foreach ($addon_list as $addon_key => &$addon) {
-        $addon['urls'] = AddonHelper::generateAddonUrls($addon_key, $addon['status']);
+        $addon['urls'] = AddonDev::generateAddonUrls($addon_key, $addon['status']);
     }
     $objects = [];
     if ($addon_list) {

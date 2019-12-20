@@ -1,12 +1,11 @@
 
 {capture "addon_list"}
-
 {if $show_addon_developer_menu}
 
 {$drowpdown_icon = "addon-developer-dropdown__icon icon-puzzle-piece icon-blue"}
 
 <div class="cm-ajax addon-developer-dropdown cm-addon-developer-container">
-    <a href="{fn_url("addons.update&addon=addon_developer")}" class="addon-developer-dropdown__settings-button icon-cog"></a>
+    <a href="{fn_url("addon_dev.update&addon=addon_developer")}" class="addon-developer-dropdown__settings-button icon-cog"></a>
     <div class="addon-developer-dropdown__search form-inline object-selector object-addon-add">
         <select id="addon_select"
             class="cm-object-selector cm-object-addon"
@@ -15,7 +14,7 @@
             data-ca-enable-search="true"
             data-ca-load-via-ajax="true"
             data-ca-page-size="10"
-            data-ca-data-url="{fn_url("addons.get_addon_list") nofilter}"
+            data-ca-data-url="{fn_url("addon_dev.get_addon_list") nofilter}"
             data-ca-placeholder="{__("type_to_search")}"
             data-ca-allow-clear="true"
             data-ca-ajax-delay="250"
@@ -41,7 +40,7 @@
 
 {else}
     {$drowpdown_icon = "icon-remove"}
-    <a class="addon-developer-dropdown__settings-button icon-cog" href="{fn_url("addons.update&addon=addon_developer")}"></a>{__("addon_developer.disabled_on_addons_page")}
+    <a class="addon-developer-dropdown__settings-button icon-cog" href="{fn_url("addon_dev.update&addon=addon_developer")}"></a>{__("addon_developer.disabled_on_addons_page")}
 {/if}
 
 {/capture}
