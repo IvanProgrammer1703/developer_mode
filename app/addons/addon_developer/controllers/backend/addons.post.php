@@ -34,26 +34,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($mode == 'add_to_fav') {
         $params = $_REQUEST;
-        $addon_code = $params['addon_code'] ?? null;
+        $addon_id = $params['addon_id'] ?? null;
         $result = [];
-        if ($addon_code) {
+        if ($addon_id) {
             $setting = 'addons.addon_developer.favorite_addons';
             $favorite_addons = Settings::instance()->getValue('favorite_addons', 'addon_developer');
-
-            if (!in_array($addon_code, $favorite_addons)) {
-                $favorite_addons[$addon_code] = YesNo::YES;
+            if (!in_array($addon_id, array_keys($favorite_addons))) {
+                $favorite_addons[$addon_id] = YesNo::YES;
                 Settings::instance()->updateValue('favorite_addons', array_keys($favorite_addons), 'addon_developer');
-                $addon_info = AddonHelper::getAddonList()[$addon_code];
+                $addon_info = AddonHelper::getAddonList()[$addon_id];
                 $addon = [
                     'name' => $addon_info['name'],
                     'status' => $addon_info['status'],
-                    'urls' => AddonHelper::generateAddonUrls($addon_code, $addon_info['status']),
+                    'urls' => AddonHelper::generateAddonUrls($addon_id, $addon_info['status']),
                 ];
+
+                Tygh::$app['view']->assign('addon', $addon);
+                Tygh::$app['ajax']->assign('response', Tygh::$app['view']->fetch('addons/addon_developer/views/addon_developer/components/favorite_addon.tpl'));
             }
         }
-
-        Tygh::$app['view']->assign('addon', $addon);
-        Tygh::$app['ajax']->assign('response', Tygh::$app['view']->fetch('addons/addon_developer/views/addon_developer/components/favorite_addon.tpl'));
     }
 
     return [CONTROLLER_STATUS_OK];
@@ -73,7 +72,7 @@ if ($mode == 'get_addon_list') {
         'dispatch' => 'addons.get_addon_list'
     ];
     $params = array_merge($default_params, $params);
-    $addon_list = AddonHelper::getAddonList($params);
+    $addon_list = AddonHelper::getAddonList($params, true);
     foreach ($addon_list as $addon_key => &$addon) {
         $addon['urls'] = AddonHelper::generateAddonUrls($addon_key, $addon['status']);
     }

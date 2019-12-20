@@ -5,9 +5,9 @@
 
 {$drowpdown_icon = "addon-developer-dropdown__icon icon-puzzle-piece icon-blue"}
 
-<form class="cm-ajax addon-developer-dropdown__form">
+<div class="cm-ajax addon-developer-dropdown cm-addon-developer-container">
     <a href="{fn_url("addons.update&addon=addon_developer")}" class="addon-developer-dropdown__settings-button icon-cog"></a>
-    <div class="addon-developer-dropdown__search form-inline object-selector object-addon-add cm-object-addon-add-container">
+    <div class="addon-developer-dropdown__search form-inline object-selector object-addon-add">
         <select id="addon_select"
             class="cm-object-selector cm-object-addon"
             name="addon_list"
@@ -19,7 +19,8 @@
             data-ca-placeholder="{__("type_to_search")}"
             data-ca-allow-clear="true"
             data-ca-ajax-delay="250"
-            data-ca-dropdown-css-class="select2-dropdown-below-addon-add"
+            data-ca-close-on-select=true
+            data-ca-dropdown-css-class="cm-addon-developer-dropdown__search-results"
             { if $autofocus == "false" }
                 { data-ca-autofocus="false" }
             { else }
@@ -36,7 +37,7 @@
     {if !$favorite_addons}
         {__("no_items")}
     {/if}
-</form>
+</div>
 
 {else}
     {$drowpdown_icon = "icon-remove"}

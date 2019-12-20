@@ -18,12 +18,17 @@ use Tygh\Registry;
 
 class AddonHelper
 {
-    //TODO: Get addons from settings or last edited addons
+    //TODO: Get addons from last edited addons
     // public static $favoriteAddons;
+    static $setting_favorite_addons = 'addons.addon_developer.favorite_addons';
 
-    public static function getAddonList($params = [])
+    public static function getAddonList($params = [], $exclude_favorites = false)
     {
         list($addons) = fn_get_addons($params);
+        if ($exclude_favorites) {
+            $favorite_addons = Registry::get(static::$setting_favorite_addons);
+            $addons = array_diff_key($addons, $favorite_addons);
+        }
         return $addons;
     }
 
@@ -35,8 +40,7 @@ class AddonHelper
 
     public static function getFavoriteAddonList()
     {
-        $setting = 'addons.addon_developer.favorite_addons';
-        $favorite_addons = Registry::get($setting);
+        $favorite_addons = Registry::get(static::$setting_favorite_addons);
         $addons = [];
         if (!empty($favorite_addons)) {
             $addons = static::getAddonList();
