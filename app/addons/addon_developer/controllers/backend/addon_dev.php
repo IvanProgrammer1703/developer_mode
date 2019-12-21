@@ -76,6 +76,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
 
+        if ($mode == 'remove_from_fav') {
+            $is_addon_removed = AddonDev::removeFromFavorites($addon_id);
+            Tygh::$app['ajax']->assign('is_addon_removed', $is_addon_removed);
+            return [CONTROLLER_STATUS_OK];
+        }
     }
 
     return [CONTROLLER_STATUS_DENIED];

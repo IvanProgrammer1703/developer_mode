@@ -8,8 +8,8 @@
         }
     });
 
-    // Add addon to favorites
     $(document).ready(function() {
+        // Add addon to favorites
         $(_.doc).on('change', '.cm-object-addon', function() {
             var container = $(this).closest('.cm-addon-developer-container'),
                 addon_id = $(this).val(),
@@ -39,6 +39,34 @@
             $.ceEvent('on', 'ce.ajaxdone', function() {
                 $('.switch:not(.has-switch)').bootstrapSwitch();
             });
+        });
+        // Remove addon from favorites
+        $(_.doc).on('click', '.cm-addon-developer-action-button', function() {
+            var clicked = $(this);
+            var row_to_remove = clicked.closest('.addon-list-favorites__item'),
+                addon_id = clicked.data('addonId'),
+                url = $.sprintf('??&addon_id=??', [fn_url('addon_dev.remove_from_fav'), addon_id], '??');
+
+            var data = {
+                addon_id: addon_id,
+            };
+            $.ceAjax('request', url, {
+                method: 'post',
+                data: data,
+                overlay: '.cm-addon-developer-container',
+                callback: function(data) {
+                    if (data['is_addon_removed'] === true) {
+                        row_to_remove.remove();
+                    }
+                }
+            });
+        });
+        $.ceEvent('on', 'ce.ajaxdone', function() {
+            if ($('.addon-list-favorites__item').length == 0) {
+                $('.addon-list-favorites__no-items').removeClass('hidden');
+            } else {
+                $('.addon-list-favorites__no-items').addClass('hidden');
+            }
         });
     });
 

@@ -39,6 +39,7 @@ class AddonDev
                 $addon['urls'] = static::generateAddonUrls($addon_id, $addon['status'], $addon['has_options']);
             }
         }
+        unset($addons['addon_developer']);
 
         return $addons;
     }
@@ -123,6 +124,20 @@ class AddonDev
         return [$addon_id, $addon];
     }
 
+    public static function removeFromFavorites($addon_id)
+    {
+        $favorite_addons = Settings::instance()->getValue('favorite_addons', 'addon_developer');
+        $is_removed = false;
+
+        if (in_array($addon_id, array_keys($favorite_addons))) {
+            unset($favorite_addons[$addon_id]);
+            Settings::instance()->updateValue('favorite_addons', array_keys($favorite_addons), 'addon_developer');
+            $is_removed = true;
+        }
+
+        return $is_removed;
+    }
+
     public static function getFavoriteAddonList()
     {
         $favorite_addons = Registry::get(static::$setting_favorite_addons);
@@ -159,7 +174,7 @@ class AddonDev
         if (!$return_url) {
             $return_url = Registry::get('config.current_url');
         }
-        $return_url = fn_url(urlencode($return_url));
+        $return_url = urlencode($return_url);
 
         if ($status == 'N') {
             $actions['install'] = 'install';
@@ -174,6 +189,7 @@ class AddonDev
                 $actions['update'] = 'update';
             }
         }
+        $actions['remove_from_fav'] = 'remove_from_fav';
 
         $urls = [];
         foreach ($actions as $action_key => $action) {

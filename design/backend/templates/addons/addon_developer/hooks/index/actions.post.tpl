@@ -1,11 +1,19 @@
-
 {capture "addon_list"}
+
 {if $show_addon_developer_menu}
 
 {$drowpdown_icon = "addon-developer-dropdown__icon icon-puzzle-piece icon-blue"}
 
 <div class="cm-ajax addon-developer-dropdown cm-addon-developer-container">
-    <a href="{fn_url("addon_dev.update&addon=addon_developer")}" class="addon-developer-dropdown__settings-button icon-cog"></a>
+
+    <a class="hand cm-dialog-opener cm-ajax addon-developer-dropdown__settings-button icon-cog"
+        href="{fn_url("addon_dev.update&addon=addon_developer")}"
+        id="opener_group{$addon.addon}installed"
+        data-ca-target-id="content_group{$addon.addon}installed"
+        data-ca-dialog-title="{__("settings")}: {$addon.name}"
+        title="{__("settings")}"
+    ></a>
+
     <div class="addon-developer-dropdown__search form-inline object-selector object-addon-add">
         <select id="addon_select"
             class="cm-object-selector cm-object-addon"
@@ -32,15 +40,15 @@
     {foreach $favorite_addons as $addon}
         {include "addons/addon_developer/views/addon_developer/components/favorite_addon.tpl"}
     {/foreach}
-    </ul>
-    {if !$favorite_addons}
+        <div class="addon-list-favorites__no-items{if $favorite_addons} hidden{/if}">
         {__("no_items")}
-    {/if}
+</div>
+    </ul>
 </div>
 
 {else}
     {$drowpdown_icon = "icon-remove"}
-    <a class="addon-developer-dropdown__settings-button icon-cog" href="{fn_url("addon_dev.update&addon=addon_developer")}"></a>{__("addon_developer.disabled_on_addons_page")}
+    {__("addon_developer.disabled_on_addons_page")}
 {/if}
 
 {/capture}
@@ -51,4 +59,5 @@
     icon=$drowpdown_icon
     no_caret=true
     text={__("addon_developer")}
+    placement="right"
 }

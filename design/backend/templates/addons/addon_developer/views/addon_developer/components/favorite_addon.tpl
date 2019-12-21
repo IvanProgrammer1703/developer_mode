@@ -1,4 +1,8 @@
-<li class="addon-list-favorites__item">
+<li class="addon-list-favorites__item addon-list-favorites-item">
+    {if ($addon.urls.remove_from_fav)}
+        <a title="{__("addon_developer.remove_from_fav")}" data-action="remove_from_fav" data-addon-id="{$addon.addon}" class="cm-ajax cm-addon-developer-action-button cm-post icon-star-half-full" href="{$addon.urls.remove_from_fav}">
+        </a>
+    {/if}
     {if ($addon.urls.install)}
         <a title="{__("install")}" class="cm-ajax cm-addon-developer-action-button alert-success cm-post icon-plus" href="{$addon.urls.install}">
         </a>
@@ -15,11 +19,13 @@
         <a title="{__("refresh")}" class="cm-ajax cm-addon-developer-action-button cm-post icon-refresh" href="{$addon.urls.refresh}">
         </a>
     {/if}
+
     {if $addon.urls.toggle}
-        <div data-addon-id="{$addon.addon}" class="switch switch-mini cm-addon-developer-switch-change list-btns">
+        <div data-addon-id="{$addon.addon}" class="switch switch-mini list-btns addon-list-favorites-item__switch cm-addon-developer-switch-change">
             <input type="checkbox" value="1" {if $addon.status == 'A'}checked="checked"{/if}/>
         </div>
     {/if}
+
     {if ($addon.urls.update)}
         <a class="hand cm-dialog-opener cm-ajax icon-cog"
             href={$addon.urls.update}
