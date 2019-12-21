@@ -110,8 +110,7 @@ class AddonDev
                 'urls' => AddonDev::generateAddonUrls($addon_id, $addon_info['status']),
             ];
         }
-
-        return $addon;
+        return [$addon_id, $addon];
     }
 
     public static function getFavoriteAddonList()

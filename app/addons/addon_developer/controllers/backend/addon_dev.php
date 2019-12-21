@@ -67,10 +67,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($mode == 'add_to_fav') {
             list($addon_id, $addon) = AddonDev::addToFavorites($addon_id);
-            fn_print_r(str_replace(DIR_ROOT,'',__FILE__).(empty($mode)?'':'  Mode='.$mode).(empty(__FUNCTION__)?' ':'  FN '.__FUNCTION__).': '.__LINE__.
-            "    \$addon",$addon);
+
             if ($addon) {
-                Tygh::$app['view']->assign('addon_id', $addon_id);
+                Tygh::$app['view']->assign('addon', $addon);
                 Tygh::$app['view']->assign('addon_id', $addon_id);
                 Tygh::$app['ajax']->assign('response', Tygh::$app['view']->fetch('addons/addon_developer/views/addon_developer/components/favorite_addon.tpl'));
                 return [CONTROLLER_STATUS_OK];
