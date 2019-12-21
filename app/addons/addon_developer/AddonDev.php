@@ -25,13 +25,21 @@ class AddonDev
     // public static $favoriteAddons;
     static $setting_favorite_addons = 'addons.addon_developer.favorite_addons';
 
-    public static function getAddonList($params = [], $exclude_favorites = false)
+    public static function getAddonList($params = [], $exclude_favorites = false, $generate_urls = false)
     {
         list($addons) = fn_get_addons($params);
+
         if ($exclude_favorites) {
             $favorite_addons = Registry::get(static::$setting_favorite_addons);
             $addons = array_diff_key($addons, $favorite_addons);
         }
+
+        if ($generate_urls) {
+            foreach ($addons as $addon_id => &$addon) {
+                $addon['urls'] = static::generateAddonUrls($addon_id, $addon['status'], $addon['has_options']);
+            }
+        }
+
         return $addons;
     }
 
@@ -93,21 +101,22 @@ class AddonDev
         return $status;
     }
 
-    public static function addToFavorites($addon_id)
+    public static function addToFavorites($addon_id, $return_url)
     {
         $favorite_addons = Settings::instance()->getValue('favorite_addons', 'addon_developer');
 
         $addon = null;
 
+        // check if addon already in list
         if (!in_array($addon_id, array_keys($favorite_addons))) {
             $favorite_addons[$addon_id] = YesNo::YES;
             Settings::instance()->updateValue('favorite_addons', array_keys($favorite_addons), 'addon_developer');
-            $addon_info = AddonDev::getAddonList()[$addon_id];
+            $addon_info = static::getAddonList([])[$addon_id];
             $addon = [
                 'addon' => $addon_id,
                 'name' => $addon_info['name'],
                 'status' => $addon_info['status'],
-                'urls' => AddonDev::generateAddonUrls($addon_id, $addon_info['status']),
+                'urls' => static::generateAddonUrls($addon_id, $addon_info['status'], $addon_info['has_options'], $return_url)
             ];
         }
 
@@ -123,12 +132,8 @@ class AddonDev
             $addons = static::getAddonList();
         }
         $addons = array_intersect_key($addons, $favorite_addons);
-
-        foreach ($addons as $addon_key => &$addon) {
-            $addon['urls'] = static::generateAddonUrls($addon_key, $addon['status']);
-            // if (empty($addon['addon'])) {
-            //     $addon['addon'] = $addon_key;
-            // }
+        foreach ($addons as $addon_id => &$addon) {
+            $addon['urls'] = static::generateAddonUrls($addon_id, $addon['status'], $addon['has_options'] ?? false);
         }
 
         return $addons;
@@ -142,31 +147,37 @@ class AddonDev
         return $addons;
     }
 
-    public static function generateAddonUrls($addon_key, $status = '', $current_url = '')
+    /**
+     * Generates urls for addon
+     * @param string $addon_id addon id from addon.xml
+     * @param string $status from fn_get_addons
+     * @param string $has_options from fn_get_addons
+     * @param string $return_url required for ajax, gets from JS window.location.href
+     */
+    public static function generateAddonUrls($addon_id, $status = '', $has_options = false, $return_url = null)
     {
-        if (!$current_url) {
-            $current_url = Registry::get('config.current_url');
+        if (!$return_url) {
+            $return_url = Registry::get('config.current_url');
         }
-        $return_url = urlencode($current_url);
+        $return_url = fn_url(urlencode($return_url));
+
         if ($status == 'N') {
             $actions['install'] = 'install';
         } else {
             $actions = [
                 'refresh' => 'refresh',
                 'reinstall' => 'reinstall',
-                'update' => 'update',
-                'uninstall' => 'uninstall'
+                'uninstall' => 'uninstall',
+                'toggle' => 'toggle'
             ];
-        }
-        if ($status == 'A') {
-            $actions['disable'] = 'disable';
-        } elseif ($status == 'D') {
-            $actions['enable'] = 'enable';
+            if ($has_options) {
+                $actions['update'] = 'update';
+            }
         }
 
         $urls = [];
         foreach ($actions as $action_key => $action) {
-            $urls[$action_key] = fn_url("addon_dev.{$action}&addon={$addon_key}") . "&return_url={$return_url}";
+            $urls[$action_key] = fn_url("addon_dev.{$action}&addon={$addon_id}") . "&return_url={$return_url}";
         }
 
         return $urls;

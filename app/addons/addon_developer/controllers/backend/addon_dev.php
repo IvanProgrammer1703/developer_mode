@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         if ($mode == 'add_to_fav') {
-            list($addon_id, $addon) = AddonDev::addToFavorites($addon_id);
+            list($addon_id, $addon) = AddonDev::addToFavorites($addon_id, $return_url);
 
             if ($addon) {
                 Tygh::$app['view']->assign('addon', $addon);
@@ -75,9 +75,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 return [CONTROLLER_STATUS_OK];
             }
         }
+
     }
 
     return [CONTROLLER_STATUS_DENIED];
+}
+
+if ($mode == 'update') {
+    fn_dispatch('addons', 'update');
 }
 
 if ($mode == 'get_addon_list') {
@@ -96,9 +101,6 @@ if ($mode == 'get_addon_list') {
     $params = array_merge($default_params, $params);
     $addon_list = AddonDev::getAddonList($params, true);
 
-    foreach ($addon_list as $addon_key => &$addon) {
-        $addon['urls'] = AddonDev::generateAddonUrls($addon_key, $addon['status']);
-    }
     $objects = [];
     if ($addon_list) {
         $objects = array_values(array_map(function ($addon_list_keys, $addon_list) {

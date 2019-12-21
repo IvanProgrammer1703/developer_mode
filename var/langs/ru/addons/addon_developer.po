@@ -1,0 +1,25 @@
+msgid ""
+msgstr "Project-Id-Version: tygh"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language-Team: English\n"
+"Language: en_US"
+
+msgctxt "Addons::name::addon_developer"
+msgid "Addon developer"
+msgstr "Addon developer"
+
+msgctxt "Addons::description::addon_developer"
+msgid "This is a developer mode"
+msgstr "This is a developer mode"
+
+msgctxt "Languages::addon_developer"
+msgid "Addon developer"
+msgstr "Addon developer"
+
+msgctxt "Languages::addon_developer.reinstall"
+msgid "Reinstall"
+msgstr "Переустановить"
+
+msgctxt "Languages::addon_developer.disabled_on_addons_page"
+msgid "Disabled on addons page"
+msgstr "Отключен на странице модулей"

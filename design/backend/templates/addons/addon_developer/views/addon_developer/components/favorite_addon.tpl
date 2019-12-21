@@ -1,24 +1,33 @@
 <li class="addon-list-favorites__item">
     {if ($addon.urls.install)}
-        <span><a data-action="install" class="cm-ajax cm-addon-developer-action-button alert-success cm-post icon-plus" href="{$addon.urls.install}">
-        </a></span>
+        <a title="{__("install")}" class="cm-ajax cm-addon-developer-action-button alert-success cm-post icon-plus" href="{$addon.urls.install}">
+        </a>
     {/if}
     {if ($addon.urls.uninstall)}
-        <span><a data-action="uninstall" class="cm-ajax cm-addon-developer-action-button alert-danger cm-post cm-confirm icon-trash" href="{$addon.urls.uninstall}">
-        </a></span>
+        <a title="{__("uninstall")}" class="cm-ajax cm-addon-developer-action-button alert-danger cm-post cm-confirm icon-trash" href="{$addon.urls.uninstall}">
+        </a>
     {/if}
     {if ($addon.urls.reinstall)}
-        <span><a data-action="reinstall" class="cm-ajax cm-addon-developer-action-button alert-info cm-post cm-confirm icon-trash" href="{$addon.urls.reinstall}">
-        </a></span>
+        <a title="{__("addon_developer.reinstall")}" class="cm-ajax cm-addon-developer-action-button alert-info cm-post cm-confirm icon-trash" href="{$addon.urls.reinstall}">
+        </a>
     {/if}
     {if ($addon.urls.refresh)}
-        <span><a data-action="refresh" class="cm-ajax cm-addon-developer-action-button cm-post icon-refresh" href="{$addon.urls.refresh}">
-        </a></span>
+        <a title="{__("refresh")}" class="cm-ajax cm-addon-developer-action-button cm-post icon-refresh" href="{$addon.urls.refresh}">
+        </a>
     {/if}
-    {if $addon.urls.enable || $addon.urls.disable}
+    {if $addon.urls.toggle}
         <div data-addon-id="{$addon.addon}" class="switch switch-mini cm-addon-developer-switch-change list-btns">
-            <input type="checkbox" value="1" {if $addon.urls.disable}checked="checked"{/if}/>
+            <input type="checkbox" value="1" {if $addon.status == 'A'}checked="checked"{/if}/>
         </div>
+    {/if}
+    {if ($addon.urls.update)}
+        <a class="hand cm-dialog-opener cm-ajax icon-cog"
+            href={$addon.urls.update}
+            id="opener_group{$addon.addon}installed"
+            data-ca-target-id="content_group{$addon.addon}installed"
+            data-ca-dialog-title="{__("settings")}: {$addon.name}"
+            title="{__("settings")}"
+        ></a>
     {/if}
     {if $addon.name}
         {$addon.name}

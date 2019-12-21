@@ -1,4 +1,5 @@
 (function(_, $) {
+    // Get addon list
     $.ceEvent('on', 'ce.change_select_list', function(object, elm) {
 
         if (elm.hasClass('cm-object-addon') && object.data) {
@@ -7,6 +8,7 @@
         }
     });
 
+    // Add addon to favorites
     $(document).ready(function() {
         $(_.doc).on('change', '.cm-object-addon', function() {
             var container = $(this).closest('.cm-addon-developer-container'),
@@ -20,7 +22,8 @@
             container.find('input.select2-search__field').addClass('hidden');
 
             var data = {
-                addon_id: addon_id
+                addon_id: addon_id,
+                return_url: window.location.href
             };
             $.ceAjax('request', url, {
                 method: 'post',
@@ -39,6 +42,7 @@
         });
     });
 
+    // Toggle addon state
     $(_.doc).on('switch-change', '.cm-addon-developer-switch-change', function(e, data) {
         var value = data.value,
             $switch = $(this),
@@ -51,6 +55,7 @@
                 addon_id: addon_id,
                 state: value ? 1 : 0
             },
+            overlay: '.cm-addon-developer-container',
             callback: function(data) {
                 if (data['state_changed'] !== true) {
                     $switch.bootstrapSwitch('toggleState', true);
