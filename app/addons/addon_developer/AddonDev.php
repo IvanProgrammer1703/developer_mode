@@ -110,6 +110,7 @@ class AddonDev
                 'urls' => AddonDev::generateAddonUrls($addon_id, $addon_info['status']),
             ];
         }
+
         return [$addon_id, $addon];
     }
 

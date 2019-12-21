@@ -16,6 +16,7 @@
                 searchResults = $('.cm-addon-developer-dropdown__search-results'),
                 selected = searchResults.find('li.select2-results__option--highlighted'),
                 searchInput = container.find('#select2-addon_select-container');
+
             container.find('input.select2-search__field').addClass('hidden');
 
             var data = {
@@ -30,38 +31,34 @@
                     favoriteList.append(data['response']);
                     selected.remove();
                     searchInput.empty();
-                    //TODO: move to ajaxdone event
-                    $('.switch:not(.has-switch)').bootstrapSwitch();
                 }
+            });
+            $.ceEvent('on', 'ce.ajaxdone', function() {
+                $('.switch:not(.has-switch)').bootstrapSwitch();
             });
         });
     });
 
-    // }(Tygh, Tygh.$));
-    //FIXME: Separate functions or not?
-    // (function(_, $) {
-
     $(_.doc).on('switch-change', '.cm-addon-developer-switch-change', function(e, data) {
-
         var value = data.value,
-            addon_id = $(this).data('addonId'),
+            $switch = $(this),
+            addon_id = $switch.data('addonId'),
             url = $.sprintf('??&addon_id=??', [fn_url('addon_dev.toggle'), addon_id], '??');
-        console.log(value);
-        console.log(addon_id);
 
         $.ceAjax('request', url, {
             method: 'post',
             data: {
                 addon_id: addon_id,
                 state: value ? 1 : 0
+            },
+            callback: function(data) {
+                if (data['state_changed'] !== true) {
+                    $switch.bootstrapSwitch('toggleState', true);
+                }
             }
         });
-    });
-
-    $.ceEvent('on', 'ce.ajaxdone', function() {
-
-        if ($('.switch .switch-mini').length == 0) {
-            $('.switch')['bootstrapSwitch']();
-        }
+        $.ceEvent('on', 'ce.ajaxdone', function() {
+            $('.switch:not(.has-switch)').bootstrapSwitch();
+        });
     });
 }(Tygh, Tygh.$));
