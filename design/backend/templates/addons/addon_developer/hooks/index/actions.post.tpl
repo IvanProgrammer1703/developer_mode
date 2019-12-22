@@ -4,7 +4,7 @@
 
 {$drowpdown_icon = "addon-developer-dropdown__icon icon-puzzle-piece icon-blue"}
 
-<div class="cm-ajax addon-developer-dropdown cm-addon-developer-container">
+<div class="addon-developer-dropdown-menu cm-addon-developer-container">
 
     <a class="hand cm-dialog-opener cm-ajax addon-developer-dropdown__settings-button icon-cog"
         href="{$addon_developer_settings_url}"
@@ -37,12 +37,12 @@
         </select>
     </div>
     <ul class="addon-list-favorites cm-favorite-addons">
-    {foreach $favorite_addons as $addon}
-        {include "addons/addon_developer/views/addon_developer/components/favorite_addon.tpl"}
-    {/foreach}
+        {foreach $favorite_addons as $addon}
+            {include "addons/addon_developer/views/addon_developer/components/favorite_addon.tpl"}
+        {/foreach}
         <div class="addon-list-favorites__no-items{if $favorite_addons} hidden{/if}">
-        {__("no_items")}
-</div>
+            {__("no_items")}
+        </div>
     </ul>
 </div>
 
