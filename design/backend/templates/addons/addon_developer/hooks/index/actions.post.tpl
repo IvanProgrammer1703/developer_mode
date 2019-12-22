@@ -7,7 +7,7 @@
 <div class="cm-ajax addon-developer-dropdown cm-addon-developer-container">
 
     <a class="hand cm-dialog-opener cm-ajax addon-developer-dropdown__settings-button icon-cog"
-        href="{fn_url("addon_dev.update&addon=addon_developer")}"
+        href="{$addon_developer_settings_url}"
         id="opener_group{$addon.addon}installed"
         data-ca-target-id="content_group{$addon.addon}installed"
         data-ca-dialog-title="{__("settings")}: {$addon.name}"

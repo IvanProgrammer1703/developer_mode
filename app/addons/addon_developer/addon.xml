@@ -8,14 +8,13 @@
     <has_icon>Y</has_icon>
     <default_language>en</default_language>
     <supplier>Ivan Balashov, Mikhail Belogubov</supplier>
-     <settings layout="separate" edition_type="ROOT,ULT:VENDOR">
+     <settings edition_type="ROOT,ULT:VENDOR">
         <sections>
             <section id="general">
                 <items>
                     <item id="favorite_addons">
-                        <!-- Варианты данной настройки будут браться из функции fn_settings_variants_addons_[addon_id]_[setting_id]-->
                         <type>selectable_box</type>
-                        <default_value><![CDATA[#M#addon_developer=Y]]></default_value>
+                        <default_value><![CDATA[#M#]]></default_value>
                         <variants/>
                     </item>
                 </items>

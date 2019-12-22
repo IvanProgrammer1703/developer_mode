@@ -23,3 +23,11 @@ msgstr "Reinstall"
 msgctxt "Languages::addon_developer.disabled_on_addons_page"
 msgid "Disabled on addons page"
 msgstr "Disabled on addons page"
+
+msgctxt "Languages::addon_developer.remove_from_favorites"
+msgid "Remove from favorites"
+msgstr "Remove from favorites"
+
+msgctxt "Languages::addon_developer.addon_removed_from_favorites"
+msgid "Addon <b>\"[addon]\"</b> removed from favorites"
+msgstr "Addon <b>\"[addon]\"</b> removed from favorites"

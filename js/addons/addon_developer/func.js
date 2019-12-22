@@ -65,6 +65,13 @@
                 });
             }
         });
+        $.ceEvent('on', 'ce.ajaxdone', function() {
+            if ($('.addon-list-favorites__item').length == 0) {
+                $('.addon-list-favorites__no-items').removeClass('hidden');
+            } else {
+                $('.addon-list-favorites__no-items').addClass('hidden');
+            }
+        });
     });
 
     // Toggle addon state
