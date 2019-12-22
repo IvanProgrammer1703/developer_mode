@@ -30,11 +30,20 @@ class AddonDev
     public static function getAddonList($params = [], $exclude_favorites = false, $generate_urls = false)
     {
         list($addons) = fn_get_addons($params);
-
         if ($exclude_favorites) {
             $favorite_addons = Registry::get(static::$setting_favorite_addons);
             if (is_array($favorite_addons)) {
                 $addons = array_diff_key($addons, $favorite_addons);
+            }
+        }
+        unset($addons['addon_developer']);
+
+        foreach ($addons as $addon_id => &$addon) {
+            if (empty($addon['addon'])) {
+                if (!is_array($addon)) {
+                    $addon = [];
+                }
+                $addon['addon'] = $addon_id;
             }
         }
 
@@ -43,8 +52,6 @@ class AddonDev
                 $addon['urls'] = static::generateAddonUrls($addon_id, $addon['status'], $addon['has_options']);
             }
         }
-        unset($addons['addon_developer']);
-
         return $addons;
     }
 
@@ -84,7 +91,7 @@ class AddonDev
     public static function uninstallAddon($addon_id, $result_ids)
     {
         if (fn_uninstall_addon($addon_id)) {
-            $addon = static::getAddon($addon_id);
+            $addon = static::getAddon($addon_id, true);
 
             Tygh::$app['view']->assign([
                 'addon' => $addon,
