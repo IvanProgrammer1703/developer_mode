@@ -22,38 +22,54 @@ defined('BOOTSTRAP') or die('Access denied');
 if (!file_exists(dirname(__DIR__, 2) . '/AddonDev.php')) return;
 require_once(dirname(__DIR__, 2) . '/AddonDev.php');
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if (defined('AJAX_REQUEST') && $_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $addon_id = $_REQUEST['addon'] ?? $_REQUEST['addon_id'] ?? null;
     $return_url = $_REQUEST['return_url'] ?? 'addons.manage';
-
+    $result_ids = $_REQUEST['result_ids'] ?? '';
     if (!empty($addon_id)) {
 
         if ($mode == 'install') {
             if (AddonDev::installAddon($addon_id)) {
 
-                return [CONTROLLER_STATUS_OK];
+                $addon = AddonDev::getAddonList([], false, true)[$addon_id];
+                Tygh::$app['view']->assign('addon', $addon);
+                Tygh::$app['view']->assign('addon_id', $addon_id);
+                Tygh::$app['view']->assign('ajax_append', true);
+
+                $html = [
+                    'installed' => true,
+                    $result_ids => Tygh::$app['view']->fetch('addons/addon_developer/views/addon_developer/components/favorite_addon.tpl')
+                ];
+                Tygh::$app['ajax']->assign('html', $html);
             }
         }
 
         if ($mode == 'uninstall') {
             if (AddonDev::uninstallAddon($addon_id)) {
 
-                return [CONTROLLER_STATUS_OK];
+                $addon = AddonDev::getAddonList([], false, true)[$addon_id];
+                Tygh::$app['view']->assign('addon', $addon);
+                Tygh::$app['view']->assign('addon_id', $addon_id);
+                Tygh::$app['view']->assign('ajax_append', true);
+
+                $html = [
+                    'uninstalled' => true,
+                    $result_ids => Tygh::$app['view']->fetch('addons/addon_developer/views/addon_developer/components/favorite_addon.tpl')
+                ];
+                Tygh::$app['ajax']->assign('html', $html);
             }
         }
 
         if ($mode == 'reinstall') {
             if (AddonDev::reinstallAddon($addon_id)) {
 
-                return [CONTROLLER_STATUS_OK];
             }
         }
 
         if ($mode == 'refresh') {
             if (AddonDev::refreshAddon($addon_id)) {
 
-                return [CONTROLLER_STATUS_OK];
             }
         }
 
@@ -62,7 +78,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $state_changed = AddonDev::toggleAddon($addon_id, $state);
             Tygh::$app['ajax']->assign('state_changed', $state_changed);
 
-            return [CONTROLLER_STATUS_OK];
         }
 
         if ($mode == 'add_to_fav') {
@@ -72,18 +87,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 Tygh::$app['view']->assign('addon', $addon);
                 Tygh::$app['view']->assign('addon_id', $addon_id);
                 Tygh::$app['ajax']->assign('response', Tygh::$app['view']->fetch('addons/addon_developer/views/addon_developer/components/favorite_addon.tpl'));
-                return [CONTROLLER_STATUS_OK];
             }
         }
 
         if ($mode == 'remove_from_fav') {
             $is_addon_removed = AddonDev::removeFromFavorites($addon_id);
             Tygh::$app['ajax']->assign('is_addon_removed', $is_addon_removed);
-            return [CONTROLLER_STATUS_OK];
         }
     }
-
-    return [CONTROLLER_STATUS_DENIED];
+    exit;
 }
 
 if ($mode == 'update') {

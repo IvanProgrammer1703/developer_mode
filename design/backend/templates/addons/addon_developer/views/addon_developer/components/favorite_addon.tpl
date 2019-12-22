@@ -1,36 +1,40 @@
-<li class="addon-list-favorites__item addon-list-favorites-item">
-    {if ($addon.urls.remove_from_fav)}
-        <a title="{__("addon_developer.remove_from_fav")}" data-action="remove_from_fav" data-addon-id="{$addon.addon}" class="cm-ajax cm-addon-developer-action-button cm-post icon-star-half-full" href="{$addon.urls.remove_from_fav}">
+{if !$addon_id} {$addon_id = $addon.addon|default:$addon@key} {/if}
+
+{if !$ajax_append}
+<li class="addon-list-favorites__item addon-list-favorites-item" id="favorite-addon-{$addon_id}">
+{/if}
+    {if $addon.urls.remove_from_fav}
+        <a title="{__("addon_developer.remove_from_fav")}" data-action="remove_from_fav" data-addon-id="{$addon_id}" class="cm-ajax cm-addon-developer-action-button icon-star-half-full" href="{$addon.urls.remove_from_fav}">
         </a>
     {/if}
-    {if ($addon.urls.install)}
-        <a title="{__("install")}" class="cm-ajax cm-addon-developer-action-button alert-success cm-post icon-plus" href="{$addon.urls.install}">
+    {if $addon.urls.install}
+        <a title="{__("install")}" data-ca-target-id="favorite-addon-{$addon_id}" class="cm-ajax cm-addon-developer-action-button alert-success cm-post icon-plus" href="{$addon.urls.install}">
         </a>
     {/if}
-    {if ($addon.urls.uninstall)}
-        <a title="{__("uninstall")}" class="cm-ajax cm-addon-developer-action-button alert-danger cm-post cm-confirm icon-trash" href="{$addon.urls.uninstall}">
+    {if $addon.urls.uninstall}
+        <a title="{__("uninstall")}" data-ca-target-id="favorite-addon-{$addon_id}" class="cm-ajax cm-addon-developer-action-button alert-danger cm-post cm-confirm icon-trash" href="{$addon.urls.uninstall}">
         </a>
     {/if}
-    {if ($addon.urls.reinstall)}
+    {if $addon.urls.reinstall}
         <a title="{__("addon_developer.reinstall")}" class="cm-ajax cm-addon-developer-action-button alert-info cm-post cm-confirm icon-trash" href="{$addon.urls.reinstall}">
         </a>
     {/if}
-    {if ($addon.urls.refresh)}
+    {if $addon.urls.refresh}
         <a title="{__("refresh")}" class="cm-ajax cm-addon-developer-action-button cm-post icon-refresh" href="{$addon.urls.refresh}">
         </a>
     {/if}
 
     {if $addon.urls.toggle}
-        <div data-addon-id="{$addon.addon}" class="switch switch-mini list-btns addon-list-favorites-item__switch cm-addon-developer-switch-change">
+        <div data-addon-id="{$addon_id}" class="switch switch-mini list-btns addon-list-favorites-item__switch cm-addon-developer-switch-change">
             <input type="checkbox" value="1" {if $addon.status == 'A'}checked="checked"{/if}/>
         </div>
     {/if}
 
-    {if ($addon.urls.update)}
+    {if $addon.urls.update}
         <a class="hand cm-dialog-opener cm-ajax icon-cog"
             href={$addon.urls.update}
-            id="opener_group{$addon.addon}installed"
-            data-ca-target-id="content_group{$addon.addon}installed"
+            id="opener_group{$addon_id}installed"
+            data-ca-target-id="content_group{$addon_id}installed"
             data-ca-dialog-title="{__("settings")}: {$addon.name}"
             title="{__("settings")}"
         ></a>
@@ -38,4 +42,7 @@
     {if $addon.name}
         {$addon.name}
     {/if}
+<!--favorite-addon-{$addon_id}-->
+{if !$ajax_append}
 </li>
+{/if}
