@@ -11,12 +11,23 @@ body {
 }
 
 .addon-developer-dropdown {
-  padding: 5px 0px 0px 0px;
+  margin: 0;
+  padding-top: 5px;
   &__settings-button {
     margin: 10px 5px 0px 5px;
   }
   &__search {
     margin: 0px 10px 10px 0px;
+  }
+  &-menu {
+    max-height: 50vh;
+    overflow-y: scroll;
+  }
+  li:not(.disabled) >a, &__settings-button {
+    &:hover {
+      background-color: transparent!important;
+      transform: scale(1.4);
+     }
   }
 }
 
@@ -30,7 +41,7 @@ body {
       font-size: 10px;
       min-width: 45px!important;
       .switch-mini {
-        line-height: 5px!important;
+        line-height: 6px!important;
       }
       .switch-left {
         background-color: #3a87ad!important;
@@ -47,8 +58,6 @@ body {
 
 @media (max-width: @TabletBreakpoint) {
   .addon-developer-dropdown {
-    margin: 0;
-    padding: 7px 6px 6px 6px;
     background: #fff;
     text-align: left;
     position: absolute;

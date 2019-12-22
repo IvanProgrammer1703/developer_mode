@@ -18,21 +18,14 @@
         <select id="addon_select"
             class="cm-object-selector cm-object-addon"
             name="addon_list"
-            data-ca-enable-images="true"
-            data-ca-enable-search="true"
-            data-ca-load-via-ajax="true"
-            data-ca-page-size="10"
+            data-ca-enable-search=true
+            data-ca-load-via-ajax=true
             data-ca-data-url="{fn_url("addon_dev.get_addon_list") nofilter}"
             data-ca-placeholder="{__("type_to_search")}"
-            data-ca-allow-clear="true"
+            data-ca-allow-clear=true
             data-ca-ajax-delay="250"
             data-ca-close-on-select=true
             data-ca-dropdown-css-class="cm-addon-developer-dropdown__search-results"
-            { if $autofocus == "false" }
-                { data-ca-autofocus="false" }
-            { else }
-                { data-ca-autofocus="true" }
-            { /if }
         >
         </select>
     </div>

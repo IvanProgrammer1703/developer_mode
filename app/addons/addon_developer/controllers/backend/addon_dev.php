@@ -64,19 +64,11 @@ if ($mode == 'update') {
 }
 
 if ($mode == 'get_addon_list') {
-    // $page_number = $_REQUEST['page'] ?? 1;
-    // $page_size = $_REQUEST['page_size'] ?? Registry::get('settings.Appearance.elements_per_page');
-
     $params = [];
     if (!empty($_REQUEST['q'])) {
         $params['q'] = $_REQUEST['q'];
     }
-    $default_params = [
-        'type' => 'any',
-        'source' => '',
-        'dispatch' => 'addon_dev.get_addon_list'
-    ];
-    $params = array_merge($default_params, $params);
+
     $addon_list = AddonDev::getAddonList($params, true);
 
     $objects = [];
