@@ -42,16 +42,19 @@
             });
         });
         // Remove addon from favorites
-        $(_.doc).on('click', '.cm-addon-developer-action-button', function() {
+        $(_.doc).on('click', '.cm-addon-developer-action-button', function(event) {
+            event.preventDefault();
             var clicked = $(this);
             var action = clicked.data('action');
             if (action == 'remove_from_fav') {
                 var row_to_remove = clicked.closest('.addon-list-favorites__item'),
                     addon_id = clicked.data('addonId'),
-                    url = $.sprintf('??&addon_id=??', [fn_url('addon_dev.remove_from_fav'), addon_id], '??');
+                    addon_name = clicked.data('addonName'),
+                    url = $.sprintf('??&addon_id=??&addon_name=??', [fn_url('addon_dev.remove_from_fav'), addon_id, addon_name], '??');
 
                 var data = {
                     addon_id: addon_id,
+                    addon_name: addon_name,
                 };
                 $.ceAjax('request', url, {
                     method: 'post',

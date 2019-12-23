@@ -3,7 +3,7 @@
 <li class="addon-list-favorites__item addon-list-favorites-item" id="favorite-addon-{$addon.addon}">
 {/if}
     {if $addon.urls.remove_from_fav}
-        <a title="{__("addon_developer.remove_from_favorites")}" data-action="remove_from_fav" data-addon-id="{$addon.addon}" class="cm-ajax cm-addon-developer-action-button icon-star-half-full" href="{$addon.urls.remove_from_fav}">
+        <a title="{__("addon_developer.remove_from_favorites")}" data-action="remove_from_fav" data-addon-id="{$addon.addon}" data-addon-name="{$addon.name}" class="cm-addon-developer-action-button icon-star-half-full" href="{$addon.urls.remove_from_fav}">
         </a>
     {/if}
     {if $addon.urls.install}

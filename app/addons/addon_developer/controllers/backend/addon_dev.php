@@ -1,28 +1,17 @@
 <?php
-/***************************************************************************
-*                                                                          *
-*   (c) 2004 Vladimir V. Kalynyak, Alexey V. Vinokurov, Ilya M. Shalnev    *
-*                                                                          *
-* This  is  commercial  software,  only  users  who have purchased a valid *
-* license  and  accept  to the terms of the  License Agreement can install *
-* and use this program.                                                    *
-*                                                                          *
-****************************************************************************
-* PLEASE READ THE FULL TEXT  OF THE SOFTWARE  LICENSE   AGREEMENT  IN  THE *
-* "copyright.txt" FILE PROVIDED WITH THIS DISTRIBUTION PACKAGE.            *
-****************************************************************************/
 
 use Tygh\Tygh;
 use AddonDeveloper\AddonDev;
+use Tygh\Registry;
 
 defined('BOOTSTRAP') or die('Access denied');
 
-if (!file_exists(dirname(__DIR__, 2) . '/AddonDev.php')) return;
-require_once(dirname(__DIR__, 2) . '/AddonDev.php');
+// require_once(implode(DIRECTORY_SEPARATOR, [Registry::get('config.dir.addons'), 'addon_developer']));
 
 if (defined('AJAX_REQUEST') && $_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $addon_id = $_REQUEST['addon'] ?? $_REQUEST['addon_id'] ?? null;
+    $addon_name = $_REQUEST['addon_name'] ?? $addon_id;
     $return_url = $_REQUEST['return_url'] ?? 'addons.manage';
     $result_ids = $_REQUEST['result_ids'] ?? '';
     if (!empty($addon_id)) {
@@ -53,7 +42,7 @@ if (defined('AJAX_REQUEST') && $_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         if ($mode == 'remove_from_fav') {
-            AddonDev::removeFromFavorites($addon_id);
+            AddonDev::removeFromFavorites($addon_id, $addon_name);
         }
     }
     exit;
