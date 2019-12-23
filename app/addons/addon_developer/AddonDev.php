@@ -16,16 +16,25 @@ class AddonDev
     // public static $favoriteAddons;
     static $setting_favorite_addons = 'addons.addon_developer.favorite_addons';
 
-    public static function getAddonList($params = [], $exclude_favorites = false, $generate_urls = false)
+    /**
+     * Gets addon list
+     * @param string $params Default fn_get_addons params
+     * @param string $exclude_favorites If function used for select2 search, should be true
+     * @param string $generate_urls Required for favorites, not required for select2 search
+     * @param string $show_status Required for select2 search, not required for favorites
+     * @return array Addons with urls or/and status
+     */
+    public static function getAddonList($params = [], $exclude_favorites = false, $generate_urls = false, $show_status = false)
     {
         list($addons) = fn_get_addons($params);
+        unset($addons['addon_developer']);
+
         if ($exclude_favorites) {
             $favorite_addons = Registry::get(static::$setting_favorite_addons);
             if (is_array($favorite_addons)) {
                 $addons = array_diff_key($addons, $favorite_addons);
             }
         }
-        unset($addons['addon_developer']);
 
         foreach ($addons as $addon_id => &$addon) {
             if (empty($addon['addon'])) {
@@ -47,6 +56,13 @@ class AddonDev
         return $addons;
     }
 
+    /**
+     * Gets single addon
+     * @param string $addon_id Addon ID
+     * @param string $generate_urls Required for adding to favorites
+     * @param string $return_url Required for adding to favorites
+     * @return array Addon with urls
+     */
     public static function getAddon($addon_id, $generate_urls = true, $return_url = '')
     {
         list($addons) = fn_get_addons([]);
@@ -64,6 +80,13 @@ class AddonDev
         return $addon;
     }
 
+    /**
+     * Installs addon
+     * @param string $addon_id Addon ID
+     * @param string $result_ids
+     * @param string $return_url Url to generate links back to current page
+     * @return ajax|boolean|html If installed, returns true and html content
+     */
     public static function installAddon($addon_id, $result_ids, $return_url)
     {
         if (fn_install_addon($addon_id)) {
@@ -86,7 +109,7 @@ class AddonDev
     public static function uninstallAddon($addon_id, $result_ids)
     {
         if (fn_uninstall_addon($addon_id)) {
-            $addon = static::getAddon($addon_id, true);
+            $addon = static::getAddon($addon_id);
 
             Tygh::$app['view']->assign([
                 'addon' => $addon,
@@ -176,7 +199,6 @@ class AddonDev
 
     public static function removeFromFavorites($addon_id, $addon_name)
     {
-        fn_print_r("\$addon_name", $addon_name);
         $favorite_addons = Settings::instance()->getValue('favorite_addons', 'addon_developer');
         $is_removed = false;
 

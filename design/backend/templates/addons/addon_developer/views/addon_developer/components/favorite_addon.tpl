@@ -7,19 +7,19 @@
         </a>
     {/if}
     {if $addon.urls.install}
-        <a title="{__("install")}" data-ca-target-id="favorite-addon-{$addon.addon}" class="cm-ajax cm-addon-developer-action-button alert-success cm-post icon-plus" href="{$addon.urls.install}">
+        <a title="{__("install")}" data-ca-target-id="favorite-addon-{$addon.addon}" class="cm-ajax alert-success cm-post icon-plus" href="{$addon.urls.install}">
         </a>
     {/if}
     {if $addon.urls.uninstall}
-        <a title="{__("uninstall")}" data-ca-target-id="favorite-addon-{$addon.addon}" class="cm-ajax cm-addon-developer-action-button alert-danger cm-post cm-confirm icon-trash" href="{$addon.urls.uninstall}">
+        <a title="{__("uninstall")}" data-ca-target-id="favorite-addon-{$addon.addon}" class="cm-ajax alert-danger cm-post cm-confirm icon-trash" href="{$addon.urls.uninstall}">
         </a>
     {/if}
     {if $addon.urls.reinstall}
-        <a title="{__("addon_developer.reinstall")}" class="cm-ajax cm-addon-developer-action-button alert-info cm-post cm-confirm icon-trash" href="{$addon.urls.reinstall}">
+        <a title="{__("addon_developer.reinstall")}" class="cm-ajax alert-info cm-post cm-confirm icon-trash" href="{$addon.urls.reinstall}">
         </a>
     {/if}
     {if $addon.urls.refresh}
-        <a title="{__("refresh")}" class="cm-ajax cm-addon-developer-action-button cm-post icon-refresh" href="{$addon.urls.refresh}">
+        <a title="{__("refresh")}" class="cm-ajax cm-post icon-refresh" href="{$addon.urls.refresh}">
         </a>
     {/if}
 
