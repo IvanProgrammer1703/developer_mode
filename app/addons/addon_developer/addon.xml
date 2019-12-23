@@ -1,11 +1,24 @@
 <?xml version="1.0"?>
 <addon scheme="3.0">
     <id>addon_developer</id>
-    <version>1.0.0</version>
+    <version>0.1-beta</version>
     <priority>666</priority>
     <position>1</position>
     <status>active</status>
     <has_icon>Y</has_icon>
     <default_language>en</default_language>
     <supplier>Ivan Balashov, Mikhail Belogubov</supplier>
+     <settings edition_type="ROOT,ULT:VENDOR">
+        <sections>
+            <section id="general">
+                <items>
+                    <item id="favorite_addons">
+                        <type>selectable_box</type>
+                        <default_value><![CDATA[#M#]]></default_value>
+                        <variants/>
+                    </item>
+                </items>
+            </section>
+        </sections>
+    </settings>
 </addon>
