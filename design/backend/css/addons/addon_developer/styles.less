@@ -9,3 +9,85 @@
 body {
   background-color:#8C8C8C;
 }
+
+.addon-developer-dropdown {
+  margin: 0;
+  padding-top: 5px;
+  &__settings-button {
+    margin: 10px 5px 0px 5px;
+  }
+  &__search {
+    margin: 0px 10px 10px 0px;
+  }
+  &-menu {
+    max-height: 50vh;
+    overflow-y: scroll;
+  }
+  li:not(.disabled) >a, &__settings-button {
+    &:hover {
+      background-color: transparent!important;
+      transform: scale(1.4);
+    }
+    &:focus {
+      // text-decoration: transparent!important;
+      background-color: transparent!important;
+      transform: scale(1.2);
+    }
+  }
+  .dropdown-menu {
+    padding-bottom: 0;
+  }
+}
+
+.addon-list-favorites {
+  list-style: none;
+  margin: 0;
+  overflow-y: auto;
+  max-height: 50vh;
+  &-item {
+    &__switch {
+      vertical-align: sub;
+      height: 16px;
+      margin-left: 3px;
+      margin-right: 3px;
+      font-size: 10px;
+      min-width: 45px!important;
+      .switch-mini {
+        line-height: 6px!important;
+      }
+      .switch-left {
+        background-color: #3a87ad!important;
+      }
+      &:hover {
+        transform: scale(1.2);
+      }
+    }
+  }
+  &__item, &__no-items {
+    padding: 2px 5px;
+  }
+  &__no-items {
+    text-align: center;
+  }
+}
+
+@media (max-width: @TabletBreakpoint) {
+  .addon-developer-dropdown {
+    background: #fff;
+    text-align: left;
+    position: absolute;
+    top: 100%;
+    left: 10px;
+    z-index: 10;
+    .btn {
+      line-height: 22px;
+      padding: 4px 12px 0px 12px;
+    }
+    &__icon {
+      margin: 1px 0px 0px 0px;
+    }
+    .dropdown-toggle {
+      font-size: 0!important;
+    }
+  }
+}

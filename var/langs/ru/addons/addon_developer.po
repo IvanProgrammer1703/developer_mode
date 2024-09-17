@@ -1,8 +1,8 @@
 msgid ""
 msgstr "Project-Id-Version: tygh"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Language-Team: English\n"
-"Language: en_US"
+"Language-Team: Russian\n"
+"Language: ru_RU"
 
 msgctxt "Addons::name::addon_developer"
 msgid "Addon developer"
@@ -18,16 +18,16 @@ msgstr "Addon developer"
 
 msgctxt "Languages::addon_developer.reinstall"
 msgid "Reinstall"
-msgstr "Reinstall"
+msgstr "Переустановить"
 
 msgctxt "Languages::addon_developer.disabled_on_addons_page"
 msgid "Disabled on addons page"
-msgstr "Disabled on addons page"
+msgstr "Отключен на странице модулей"
 
 msgctxt "Languages::addon_developer.remove_from_favorites"
 msgid "Remove from favorites"
-msgstr "Remove from favorites"
+msgstr "Удалить из избранного"
 
 msgctxt "Languages::addon_developer.addon_removed_from_favorites"
 msgid "Addon <b>\"[addon]\"</b> removed from favorites"
-msgstr "Addon <b>\"[addon]\"</b> removed from favorites"
+msgstr "Модуль <b>\"[addon]\"</b> удален из избранного"
